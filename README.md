@@ -17,10 +17,10 @@ Goals:
 - `php install` installs current default php version
 - `php install <version>` installs given php version (format: e.g. `5.6.27`)
 - `php versions` lists all currently installed versions
+- `php global <version>` configure default version (like phpenv)
 
 ## Planned commands
 
-- `php global <version>` configure default version (like phpenv)
 - `php local <version>` configure version for current folder (like phpenv)
 - `php rename <version> <version>` for support custom version alias
 - `php configure <version> ...` is planned for some php.ini modifications (interface/arguments not planned yet)
