@@ -72,7 +72,7 @@ SET params=
 
 rem call specific php
 IF not exist "!versionsPath!\!phpversion!\php.exe" (
-    ECHO    PHP !phpversion! is currently not installed!
+    ECHO    PHP !phpversion! is currently not installed
     ECHO.
     GOTO help
 )
@@ -93,7 +93,7 @@ SET architecture=x86
 SET installVersion=%2
 IF "!installVersion!" == ""  SET installVersion=!phpversion!
 IF exist "!versionsPath!\!installVersion!\php.exe" (
-    ECHO    !installVersion! already exists!
+    ECHO    PHP !installVersion! is already installed
     GOTO shutdown
 )
 IF "!installVersion!" gtr "5.5" (
@@ -103,11 +103,11 @@ IF "!installVersion!" gtr "7" (
     SET vc=VC14
     SET architecture=x64
 )
-IF exist "!versionsPath!\!installVersion!.zip" ECHO    !versionsPath!\!installVersion!.zip already downloaded!
+IF exist "!versionsPath!\!installVersion!.zip"     ECHO    !versionsPath!\!installVersion!.zip already downloaded
 IF not exist "!versionsPath!\!installVersion!.zip" CALL :downloadRelease
 IF not exist "!versionsPath!\!installVersion!.zip" CALL :downloadArchive
 IF not exist "!versionsPath!\!installVersion!.zip" (
-    ECHO    Download failed!
+    ECHO    Download failed
     GOTO shutdown
 )
 CALL :unzipAndConfigure
@@ -117,25 +117,15 @@ ECHO.
 ECHO    Successfully added php version !installVersion! [thread safe, !vc!, !architecture!]
 GOTO shutdown
 
-rem /**
-rem  * download php version from current releases
-rem  */
-:downloadRelease
-SET url="http://windows.php.net/downloads/releases/php-!installVersion!-Win32-!vc!-!architecture!.zip"
-ECHO    Download: !url!
-bitsadmin /rawreturn /transfer "PHP-Download !installVersion!" !url! !versionsPath!\!installVersion!.zip  > nul  2>&1
-IF not exist "!versionsPath!\!installVersion!.zip" ECHO       not successful!
-EXIT /B 0
 
-rem /**
-rem  * download php version from archive
-rem  */
+:downloadRelease
+!basepath!php\downloadPhp.bat php-!installVersion!-Win32-!vc!-!architecture!.zip !versionsPath!\!installVersion!.zip
+EXIT /B %ERRORLEVEL%
+
 :downloadArchive
-SET url="http://windows.php.net/downloads/releases/archives/php-!installVersion!-Win32-!vc!-!architecture!.zip"
-ECHO    Download: !url!
-bitsadmin /rawreturn /transfer "PP-Download !installVersion!" !url! !versionsPath!\!installVersion!.zip  > nul  2>&1
-IF not exist "!versionsPath!\!installVersion!.zip" ECHO       not successful!
-EXIT /B 0
+!basepath!php\downloadPhp.bat archives/php-!installVersion!-Win32-!vc!-!architecture!.zip !versionsPath!\!installVersion!.zip
+EXIT /B %ERRORLEVEL%
+
 
 rem /**
 rem  * unzip package and copy php.ini
@@ -167,7 +157,7 @@ rem /**
 rem  * switch global php version
 rem  */
 :global
-IF not exist "!versionsPath!\%2\php.exe"     ECHO    PHP %2 is currently not installed!
+IF not exist "!versionsPath!\%2\php.exe"     ECHO    PHP %2 is currently not installed
 IF exist "!versionsPath!\%2\php.exe"         ECHO %2>!globalVersionFile!
 GOTO shutdown
 
