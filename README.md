@@ -30,13 +30,13 @@ Goals:
 ## System requirements
 
 - bitsadmin (for downloading binaries from http://windows.php.net/download)
-- unzip
+- unzip (if not available yet, please download from http://gnuwin32.sourceforge.net/packages/unzip.htm and put unzip.exe to your PATH)
 
-There should be no global installed PHP-Environment-Variables (like PHPRC) or other php.exe within PATH.
+There should be no global installed PHP-Environment-Variables (like PHPRC) or other php.exe within PATH
 
 ## Optional system configurations
 
-- it is recommended to add AlternatePHP (directory where php.bat is located) to your PAT  
+It is recommended to add AlternatePHP (directory where php.bat is located) to your PATH
 
 ## Example
 
