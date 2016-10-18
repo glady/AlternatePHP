@@ -139,7 +139,7 @@ rem /**
 rem  * list installed versions
 rem  */
 :versions
-ls "!versionsPath!"
+dir "!versionsPath!" /B /A:D
 GOTO shutdown
 
 rem /**
