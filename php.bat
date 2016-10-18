@@ -21,27 +21,33 @@ IF "%1" == "global"    GOTO global
 GOTO php
 
 
+:header
+ECHO.
+ECHO  -------------------------- AlternatePHP --------------------------
+ECHO    AlternatePHP is a batch file for Windows environments that can
+ECHO    make different versions of php available. It is inspired by
+ECHO    phpenv / rbenv which is available on other operating systems.
+ECHO.
+ECHO    Visit on GitHub: https://github.com/glady/AlternatePHP
+ECHO  ------------------------------------------------------------------
+ECHO.
+EXIT /B 0
+
 rem /**
 rem  * Output of help information about this file
 rem  */
 :help
-ECHO -------------------------- AlternatePHP --------------------------
-ECHO   AlternatePHP is a batch file for Windows environments that can
-ECHO   make different versions of php available. It is inspired by
-ECHO   phpenv / rbenv which is available on other operating systems.
+CALL :header
+ECHO    current settings:
+ECHO       global: !phpversion! [defined in !globalVersionFile!]
+ECHO       local : -not supported yet-
 ECHO.
-ECHO   Visit on GitHub: https://github.com/glady/AlternatePHP
-ECHO ------------------------------------------------------------------
-ECHO.
-ECHO current settings:
-ECHO    global: !phpversion! [defined in !globalVersionFile!]
-ECHO    local : -not supported yet-
-ECHO.
-ECHO supported actions:
-ECHO  - php script.php ...       = call script with default php version
-ECHO  - php x.y.z script.php ... = call script with php version x.y.z
-ECHO  - php versions             = List all installed php versions
-ECHO  - php install x.y.z        = Download and unzip php version x.y.z
+ECHO    supported actions:
+ECHO       php script.php ...       = call script with default php version
+ECHO       php x.y.z script.php ... = call script with php version x.y.z
+ECHO       php versions             = List all installed php versions
+ECHO       php install x.y.z        = Download and unzip php version x.y.z
+ECHO       php global x.y.z         = Change global php version
 GOTO shutdown
 
 
@@ -66,7 +72,7 @@ SET params=
 
 rem call specific php
 IF not exist "!versionsPath!\!phpversion!\php.exe" (
-    ECHO PHP !phpversion! is currently not installed.
+    ECHO    PHP !phpversion! is currently not installed!
     ECHO.
     GOTO help
 )
@@ -79,12 +85,15 @@ rem /**
 rem  * Retrieve a new php version
 rem  */
 :install
+
+CALL :header
+
 SET vc=VC9
 SET architecture=x86
 SET installVersion=%2
 IF "!installVersion!" == ""  SET installVersion=!phpversion!
 IF exist "!versionsPath!\!installVersion!\php.exe" (
-    ECHO !installVersion! already exists!
+    ECHO    !installVersion! already exists!
     GOTO shutdown
 )
 IF "!installVersion!" gtr "5.5" (
@@ -94,16 +103,18 @@ IF "!installVersion!" gtr "7" (
     SET vc=VC14
     SET architecture=x64
 )
-
+IF exist "!versionsPath!\!installVersion!.zip" ECHO    !versionsPath!\!installVersion!.zip already downloaded!
 IF not exist "!versionsPath!\!installVersion!.zip" CALL :downloadRelease
 IF not exist "!versionsPath!\!installVersion!.zip" CALL :downloadArchive
 IF not exist "!versionsPath!\!installVersion!.zip" (
-    ECHO Download failed!
+    ECHO    Download failed!
     GOTO shutdown
 )
 CALL :unzipAndConfigure
-ECHO Added php version !installVersion! = thread safe, !vc!, !architecture!
-ECHO  - copied php.ini-production as new php.ini
+IF "%ERRORLEVEL%" NEQ "0"  GOTO shutdown
+
+ECHO.
+ECHO    Successfully added php version !installVersion! [thread safe, !vc!, !architecture!]
 GOTO shutdown
 
 rem /**
@@ -111,9 +122,9 @@ rem  * download php version from current releases
 rem  */
 :downloadRelease
 SET url="http://windows.php.net/downloads/releases/php-!installVersion!-Win32-!vc!-!architecture!.zip"
-ECHO  - Download: !url!
+ECHO    Download: !url!
 bitsadmin /rawreturn /transfer "PHP-Download !installVersion!" !url! !versionsPath!\!installVersion!.zip  > nul  2>&1
-IF not exist "!versionsPath!\!installVersion!.zip" ECHO     - not successful!
+IF not exist "!versionsPath!\!installVersion!.zip" ECHO       not successful!
 EXIT /B 0
 
 rem /**
@@ -121,17 +132,27 @@ rem  * download php version from archive
 rem  */
 :downloadArchive
 SET url="http://windows.php.net/downloads/releases/archives/php-!installVersion!-Win32-!vc!-!architecture!.zip"
-ECHO  - Download: !url!
+ECHO    Download: !url!
 bitsadmin /rawreturn /transfer "PP-Download !installVersion!" !url! !versionsPath!\!installVersion!.zip  > nul  2>&1
-IF not exist "!versionsPath!\!installVersion!.zip" ECHO     - not successful!
+IF not exist "!versionsPath!\!installVersion!.zip" ECHO       not successful!
 EXIT /B 0
 
 rem /**
 rem  * unzip package and copy php.ini
 rem  */
 :unzipAndConfigure
+ECHO    unzip downloaded binaries to !versionsPath!\!installVersion!
+
+CALL :checkUnzip
+IF "%ERRORLEVEL%" NEQ "0" (
+    ECHO       no unzip found!
+    EXIT /B %ERRORLEVEL%
+)
+
 unzip -qq !versionsPath!\!installVersion!.zip -d !versionsPath!\!installVersion!
-del   !versionsPath!\!installVersion!.zip
+rem del   !versionsPath!\!installVersion!.zip
+
+ECHO    copy php.ini-production to php.ini
 copy  !versionsPath!\!installVersion!\php.ini-production !versionsPath!\!installVersion!\php.ini   > nul  2>&1
 EXIT /B 0
 
@@ -146,9 +167,13 @@ rem /**
 rem  * switch global php version
 rem  */
 :global
-IF not exist "!versionsPath!\%2\php.exe"     ECHO PHP %2 is currently not installed.
+IF not exist "!versionsPath!\%2\php.exe"     ECHO    PHP %2 is currently not installed!
 IF exist "!versionsPath!\%2\php.exe"         ECHO %2>!globalVersionFile!
 GOTO shutdown
+
+:checkUnzip
+where unzip  > nul  2>&1
+EXIT /B %ERRORLEVEL%
 
 rem /**
 rem  * end of script
