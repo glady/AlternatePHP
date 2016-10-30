@@ -10,6 +10,8 @@ Goals:
 
 - `php -v` or `php <script.php> <arguments>` calls current default php version
 - `php <version> -v` or `php <version> <script.php> <arguments>` calls the same on given php version (format: e.g. `5.6.27`)
+- `php xdebug -v` or `php xdebug <script.php> <arguments>` calls current default php version with xdebug
+- `php <version> xdebug -v` or `php <version> xdebug <script.php> <arguments>` calls the same on given php version with xdebug
 
 ## Added commands
 
@@ -84,4 +86,14 @@ PHP 7.0.12 (cli) (built: Oct 13 2016 10:47:49) ( ZTS )
 Copyright (c) 1997-2016 The PHP Group
 Zend Engine v3.0.0, Copyright (c) 1998-2016 Zend Technologies
 
+```
+
+When php_xdebug.dll (named like this) is available within `ext` folder of current php folder, then a script can be called
+ by `php xdebug script.php` for loading xdebug within that process.
+```
+$ php xdebug -v
+PHP 7.0.12 (cli) (built: Oct 13 2016 10:47:49) ( ZTS )
+Copyright (c) 1997-2016 The PHP Group
+Zend Engine v3.0.0, Copyright (c) 1998-2016 Zend Technologies
+    with Xdebug v2.4.1, Copyright (c) 2002-2016, by Derick Rethans
 ```

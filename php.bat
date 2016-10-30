@@ -42,12 +42,15 @@ ECHO    current settings:
 ECHO       global: !phpversion! [defined in !globalVersionFile!]
 ECHO       local : -not supported yet-
 ECHO.
-ECHO    supported actions:
-ECHO       php script.php ...       = call script with default php version
-ECHO       php x.y.z script.php ... = call script with php version x.y.z
-ECHO       php versions             = List all installed php versions
-ECHO       php install x.y.z        = Download and unzip php version x.y.z
-ECHO       php global x.y.z         = Change global php version
+ECHO    call scripts in a specific PHP version
+ECHO       php [version] [xdebug] script.php
+ECHO         version = optional, default version is used, when not given
+ECHO         xdebug  = enables xdebug, if php_xdebug.dll is available within ext-folder of version, default disabled
+ECHO.
+ECHO    supported wrapper actions:
+ECHO       php versions                    = List all installed php versions
+ECHO       php install x.y.z               = Download and unzip php version x.y.z
+ECHO       php global x.y.z                = Change global php version
 GOTO shutdown
 
 
@@ -65,6 +68,13 @@ rem collect remaining arguments
 SET params=
 :loop
     IF [%1] == [] goto endloop
+    IF [%1] == [xdebug] (
+        IF exist "!versionsPath!\!phpversion!\ext\php_xdebug.dll" (
+            SET params=!params! -d "zend_extension=php_xdebug.dll"
+        )
+        SHIFT
+        GOTO loop
+    )
     SET params=!params! %1
     SHIFT
     goto loop
