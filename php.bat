@@ -116,6 +116,7 @@ IF "!installVersion!" gtr "7" (
 IF exist "!versionsPath!\!installVersion!.zip"     ECHO    !versionsPath!\!installVersion!.zip already downloaded
 IF not exist "!versionsPath!\!installVersion!.zip" CALL :downloadRelease
 IF not exist "!versionsPath!\!installVersion!.zip" CALL :downloadArchive
+IF not exist "!versionsPath!\!installVersion!.zip" CALL :downloadCandidate
 IF not exist "!versionsPath!\!installVersion!.zip" (
     ECHO    Download failed
     GOTO shutdown
@@ -129,11 +130,15 @@ GOTO shutdown
 
 
 :downloadRelease
-!basepath!php\downloadPhp.bat php-!installVersion!-Win32-!vc!-!architecture!.zip !versionsPath!\!installVersion!.zip
+!basepath!php\downloadPhp.bat releases/php-!installVersion!-Win32-!vc!-!architecture!.zip !versionsPath!\!installVersion!.zip
 EXIT /B %ERRORLEVEL%
 
 :downloadArchive
-!basepath!php\downloadPhp.bat archives/php-!installVersion!-Win32-!vc!-!architecture!.zip !versionsPath!\!installVersion!.zip
+!basepath!php\downloadPhp.bat releases/archives/php-!installVersion!-Win32-!vc!-!architecture!.zip !versionsPath!\!installVersion!.zip
+EXIT /B %ERRORLEVEL%
+
+:downloadCandidate
+!basepath!php\downloadPhp.bat qa/php-!installVersion!-Win32-!vc!-!architecture!.zip !versionsPath!\!installVersion!.zip
 EXIT /B %ERRORLEVEL%
 
 
