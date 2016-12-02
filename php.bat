@@ -7,6 +7,10 @@ rem  */
 
 SETLOCAL EnableDelayedExpansion
 
+rem load all params as string
+rem (this contains also parts like a=b, while access single params would deliver %1=a and %2=b without information which character is between that)
+SET params=%*
+
 SET basepath=%~dp0
 SET versionsPath=!basepath!php\versions
 SET globalVersionFile=!basepath!php\php.version
@@ -58,27 +62,24 @@ rem /**
 rem  * Find and call php version by first argument or by configured default version
 rem  */
 :php
+
 rem shift first argument as version
 IF exist "!versionsPath!\%1\php.exe" (
     SET phpversion=%1
     SHIFT
+    rem remove version from params
+    CALL:strlen %phpversion% length
+    CALL:removeFromStringLeft params "!params!" !length!
 )
-
-rem collect remaining arguments
-SET params=
-:loop
-    IF [%1] == [] goto endloop
-    IF [%1] == [xdebug] (
-        IF exist "!versionsPath!\!phpversion!\ext\php_xdebug.dll" (
-            SET params=!params! -d "zend_extension=php_xdebug.dll"
-        )
-        SHIFT
-        GOTO loop
+rem shift next (or first) argument named xdebug
+IF [%1] == [xdebug] (
+    CALL:removeFromStringLeft params "!params!" 7
+    IF exist "!versionsPath!\!phpversion!\ext\php_xdebug.dll" (
+        rem prepend "-d" before remaining arguments
+        SET params=-d "zend_extension=!versionsPath!\!phpversion!\ext\php_xdebug.dll" !params!
     )
-    SET params=!params! %1
     SHIFT
-    goto loop
-:endloop
+)
 
 rem call specific php
 IF not exist "!versionsPath!\!phpversion!\php.exe" (
@@ -179,6 +180,24 @@ GOTO shutdown
 :checkUnzip
 where unzip  > nul  2>&1
 EXIT /B %ERRORLEVEL%
+
+rem implementation of string length (string, &length)
+:strlen
+set stringY=%~1%
+set /A lengthY=0
+:stringLengthLoop
+if defined stringY (set stringY=%stringY:~1%&set /A lengthY += 1&goto stringLengthLoop)
+set "%~2=%lengthY%"
+GOTO :EOF
+
+rem implementation of cutting off first x characters (&out, in length)
+:removeFromStringLeft
+set stringX=%~2%
+set /A lengthX=%3%
+:removeFromStringLeftLoop
+if %lengthX% gtr 0 (set stringX=%stringX:~1%&SET /A lengthX -= 1&goto removeFromStringLeftLoop)
+set "%1=%stringX%"
+GOTO :EOF
 
 rem /**
 rem  * end of script
