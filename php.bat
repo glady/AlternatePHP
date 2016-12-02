@@ -68,7 +68,8 @@ IF exist "!versionsPath!\%1\php.exe" (
     SET phpversion=%1
     SHIFT
     rem remove version from params
-    CALL:strlen %phpversion% length
+    CALL:strlen !phpversion! length
+    SET /A length += 1
     CALL:removeFromStringLeft params "!params!" !length!
 )
 rem shift next (or first) argument named xdebug
