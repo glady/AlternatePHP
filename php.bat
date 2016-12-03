@@ -33,6 +33,8 @@ ECHO    make different versions of php available. It is inspired by
 ECHO    phpenv / rbenv which is available on other operating systems.
 ECHO.
 ECHO    Visit on GitHub: https://github.com/glady/AlternatePHP
+ECHO.
+ECHO    Current version: v1.0.0
 ECHO  ------------------------------------------------------------------
 ECHO.
 EXIT /B 0

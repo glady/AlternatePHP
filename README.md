@@ -21,10 +21,13 @@ Goals:
 - `php versions` lists all currently installed versions
 - `php global <version>` configure default version (like phpenv)
 
-## Planned commands
+## Planned 
 
+- [v1.1] prepend AlternatePhp version-information to `php -v` call
+- [v1.1] exclude default `php/php.version` file and set default within `php.bat` (it would be overwritten on self-update)
+- [v1.1] `php self-update` download latest release of AlternatePhp from GitHub
+- [v1.1] `php rename <version> <version>` for support custom version alias
 - `php local <version>` configure version for current folder (like phpenv)
-- `php rename <version> <version>` for support custom version alias
 - `php configure <version> ...` is planned for some php.ini modifications (interface/arguments not planned yet)
 - `php enable-xdebug <version>` directly add correct php_xdebug.dll to given version and add extension to php.ini 
 - `php disable-xdebug <version>` remove extension from php.ini
