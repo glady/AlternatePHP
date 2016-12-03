@@ -63,18 +63,21 @@ rem  * Find and call php version by first argument or by configured default vers
 rem  */
 :php
 
+CALL:trimStringLeft params "!params!"
 rem shift first argument as version
 IF exist "!versionsPath!\%1\php.exe" (
     SET phpversion=%1
     SHIFT
     rem remove version from params
     CALL:strlen !phpversion! length
-    SET /A length += 1
     CALL:removeFromStringLeft params "!params!" !length!
+    CALL:trimStringLeft params "!params!"
 )
+
 rem shift next (or first) argument named xdebug
 IF [%1] == [xdebug] (
     CALL:removeFromStringLeft params "!params!" 7
+    CALL:trimStringLeft params "!params!"
     IF exist "!versionsPath!\!phpversion!\ext\php_xdebug.dll" (
         rem prepend "-d" before remaining arguments
         SET params=-d "zend_extension=!versionsPath!\!phpversion!\ext\php_xdebug.dll" !params!
@@ -198,6 +201,14 @@ set /A lengthX=%3%
 :removeFromStringLeftLoop
 if %lengthX% gtr 0 (set stringX=%stringX:~1%&SET /A lengthX -= 1&goto removeFromStringLeftLoop)
 set "%1=%stringX%"
+GOTO :EOF
+
+rem implementation of cutting off first characters that are spaces (left trim) (&out, in)
+:trimStringLeft
+set stringZ=%~2%
+:trimStringLeftLoop
+if "%stringZ:~0,1%" == " " (set stringZ=%stringZ:~1%&goto trimStringLeftLoop)
+set "%1=%stringZ%"
 GOTO :EOF
 
 rem /**
