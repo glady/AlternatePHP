@@ -24,8 +24,13 @@ IF "%1" == "install"   GOTO install
 IF "%1" == "global"    GOTO global
 GOTO php
 
+:outputVersionInformation
+ECHO glady/AlternatePhp v1.0.0
+EXIT /B 0
 
 :header
+ECHO.
+CALL :outputVersionInformation
 ECHO.
 ECHO  -------------------------- AlternatePHP --------------------------
 ECHO    AlternatePHP is a batch file for Windows environments that can
@@ -33,8 +38,6 @@ ECHO    make different versions of php available. It is inspired by
 ECHO    phpenv / rbenv which is available on other operating systems.
 ECHO.
 ECHO    Visit on GitHub: https://github.com/glady/AlternatePHP
-ECHO.
-ECHO    Current version: v1.0.0
 ECHO  ------------------------------------------------------------------
 ECHO.
 EXIT /B 0
@@ -65,24 +68,26 @@ rem  * Find and call php version by first argument or by configured default vers
 rem  */
 :php
 
-CALL:trimStringLeft params "!params!"
+SET prepend=
+
+CALL :trimStringLeft params "!params!"
 rem shift first argument as version
 IF exist "!versionsPath!\%1\php.exe" (
     SET phpversion=%1
     SHIFT
     rem remove version from params
-    CALL:strlen !phpversion! length
-    CALL:removeFromStringLeft params "!params!" !length!
-    CALL:trimStringLeft params "!params!"
+    CALL :strlen !phpversion! length
+    CALL :removeFromStringLeft params "!params!" !length!
+    CALL :trimStringLeft params "!params!"
 )
 
 rem shift next (or first) argument named xdebug
 IF [%1] == [xdebug] (
-    CALL:removeFromStringLeft params "!params!" 7
-    CALL:trimStringLeft params "!params!"
+    CALL :removeFromStringLeft params "!params!" 7
+    CALL :trimStringLeft params "!params!"
     IF exist "!versionsPath!\!phpversion!\ext\php_xdebug.dll" (
         rem prepend "-d" before remaining arguments
-        SET params=-d "zend_extension=!versionsPath!\!phpversion!\ext\php_xdebug.dll" !params!
+        SET prepend=-d "zend_extension=!versionsPath!\!phpversion!\ext\php_xdebug.dll"
     )
     SHIFT
 )
@@ -94,7 +99,14 @@ IF not exist "!versionsPath!\!phpversion!\php.exe" (
     GOTO help
 )
 
-"!versionsPath!\!phpversion!\php.exe" !params!
+if "!params:~0,2!" == "-v" (
+    CALL :outputVersionInformation
+)
+if "!params:~0,9!" == "--version" (
+    CALL :outputVersionInformation
+)
+
+"!versionsPath!\!phpversion!\php.exe" !prepend! !params!
 GOTO shutdown
 
 
