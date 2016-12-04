@@ -15,7 +15,13 @@ SET basepath=%~dp0
 SET versionsPath=!basepath!php\versions
 SET globalVersionFile=!basepath!php\php.version
 
-SET /P phpversion=<!globalVersionFile!
+if exist "!globalVersionFile!" (
+    SET loadedGlobalVersionFile=!globalVersionFile!
+)
+if not exist "!globalVersionFile!" (
+    SET loadedGlobalVersionFile=!basepath!php\default.php.version
+)
+SET /P phpversion=<!loadedGlobalVersionFile!
 
 IF "%1" == "help"      GOTO help
 IF "%1" == "/?"        GOTO help
@@ -48,7 +54,7 @@ rem  */
 :help
 CALL :header
 ECHO    current settings:
-ECHO       global: !phpversion! [defined in !globalVersionFile!]
+ECHO       global: !phpversion! [defined in !loadedGlobalVersionFile!]
 ECHO       local : -not supported yet-
 ECHO.
 ECHO    call scripts in a specific PHP version
