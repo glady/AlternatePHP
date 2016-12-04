@@ -1,6 +1,6 @@
 # AlternatePHP v1.1.0
 
-This release has some internal changes for preparing self-update of AlternatePhp 
+This release has some internal changes for preparing self-update of AlternatePHP 
 
 ## New commands with v1.1.0
 
@@ -24,6 +24,6 @@ It is recommended to add AlternatePHP (directory where php.bat is located) to yo
 
 ## Issues and Pull Requests
 
-- enhancement #3 - prepend AlternatePhp version-information to `php -v` call
+- enhancement #3 - prepend AlternatePHP version-information to `php -v` call
 - enhancement #4 - exclude default `php/php.version` file and set default within `php.bat` (it would be overwritten on self-update)
 - enhancement #6 - `php rename <version> <version>` for support custom version alias

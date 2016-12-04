@@ -22,18 +22,20 @@ if not exist "!globalVersionFile!" (
     SET loadedGlobalVersionFile=!basepath!php\default.php.version
 )
 SET /P phpversion=<!loadedGlobalVersionFile!
+SET /P currentVersion=<!basePath!VERSION
 
-IF "%1" == "help"      GOTO help
-IF "%1" == "/?"        GOTO help
-IF "%1" == "license"   GOTO license
-IF "%1" == "versions"  GOTO versions
-IF "%1" == "install"   GOTO install
-IF "%1" == "global"    GOTO global
-IF "%1" == "rename"    GOTO rename
+IF "%1" == "help"        GOTO help
+IF "%1" == "/?"          GOTO help
+IF "%1" == "license"     GOTO license
+IF "%1" == "versions"    GOTO versions
+IF "%1" == "install"     GOTO install
+IF "%1" == "global"      GOTO global
+IF "%1" == "rename"      GOTO rename
+IF "%1" == "self-update" GOTO selfUpdate
 GOTO php
 
 :outputVersionInformation
-ECHO glady/AlternatePhp v1.0.0
+ECHO glady/AlternatePHP !currentVersion!
 EXIT /B 0
 
 :header
@@ -187,12 +189,16 @@ EXIT /B %ERRORLEVEL%
 
 :downloadPhp
 SET url=http://windows.php.net/downloads/%1
-ECHO    Download: !url!
-bitsadmin /rawreturn /transfer "PHP-Download" !url! %2  > nul  2>&1
+CALL :download !url! %2
+EXIT /B %ERRORLEVEL%
+
+:download
+ECHO    Download: %1
+bitsadmin /rawreturn /transfer "Download" %1 %2  > nul  2>&1
+bitsadmin /SetSecurityFlags "Download" 0x0000  > nul  2>&1
 IF exist %2      ECHO       Successful!
 IF not exist %2  ECHO       Not successful!
 EXIT /B %ERRORLEVEL%
-
 
 rem /**
 rem  * unzip package and copy php.ini
@@ -207,11 +213,51 @@ IF "%ERRORLEVEL%" NEQ "0" (
 )
 
 unzip -qq !versionsPath!\!installVersion!.zip -d !versionsPath!\!installVersion!
-rem del   !versionsPath!\!installVersion!.zip
 
 ECHO    copy php.ini-production to php.ini
 copy  !versionsPath!\!installVersion!\php.ini-production !versionsPath!\!installVersion!\php.ini   > nul  2>&1
 EXIT /B 0
+
+:downloadLatestVersionFile
+CALL :download https://raw.githubusercontent.com/glady/AlternatePHP/master/VERSION !versionsPath!\latestVERSION
+EXIT /B %ERRORLEVEL%
+
+:downloadLatestRelease
+CALL :download https://github.com/glady/AlternatePHP/archive/!latestVersion!.zip !versionsPath!\latestAlternatePhp.zip
+EXIT /B %ERRORLEVEL%
+
+:selfUpdate
+SET /P currentVersion=<!basePath!VERSION
+
+rem DEL !versionsPath!\latestVERSION
+CALL :downloadLatestVersionFile
+IF not exist !versionsPath!\latestVERSION (
+    ECHO     failed to retrieve latest version file
+    GOTO shutdown
+)
+SET /P latestVersion=<!versionsPath!\latestVERSION
+
+IF !currentVersion! == !latestVersion! (
+    ECHO     You have already the latest version installed: !latestVersion!
+    GOTO shutdown
+)
+rem TODO: not fully supported
+ECHO     ... feature in work, but not ready yet.
+GOTO shutdown
+
+CALL :downloadLatestRelease
+CALL :checkUnzip
+IF "%ERRORLEVEL%" NEQ "0" (
+    ECHO       no unzip found!
+    EXIT /B %ERRORLEVEL%
+)
+
+ECHO   Unzip new AlternatePHP over old one
+SET subFolder=AlternatePHP-!latestVersion:~1!
+unzip -qq -o !versionsPath!\latestAlternatePhp.zip -d !basePath!update
+xcopy /S /E "!basePath!update/!subFolder!/*" "!basePath!"
+rd /s /q "!basePath!update"
+GOTO shutdown
 
 rem /**
 rem  * list installed versions

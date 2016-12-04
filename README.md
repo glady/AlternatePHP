@@ -28,7 +28,7 @@ Current default PHP version: 7.0.13
 
 ## Planned 
 
-- [v1.1] #5 - `php self-update` download latest release of AlternatePhp from GitHub
+- [v1.1] #5 - `php self-update` download latest release of AlternatePHP from GitHub
 - `php local <version>` configure version for current folder (like phpenv)
 - `php configure <version> ...` is planned for some php.ini modifications (interface/arguments not planned yet)
 - `php enable-xdebug <version>` directly add correct php_xdebug.dll to given version and add extension to php.ini 
@@ -80,7 +80,7 @@ $ php versions
 7.0.12
 
 $ php -v
-glady/AlternatePhp v1.0.0
+glady/AlternatePHP v1.0.0
 PHP 7.0.12 (cli) (built: Oct 13 2016 10:47:49) ( ZTS )
 Copyright (c) 1997-2016 The PHP Group
 Zend Engine v3.0.0, Copyright (c) 1998-2016 Zend Technologies
@@ -94,19 +94,19 @@ $ php versions
 5.6.27  7.0.12
 
 $ php -v
-glady/AlternatePhp v1.0.0
+glady/AlternatePHP v1.0.0
 PHP 7.0.12 (cli) (built: Oct 13 2016 10:47:49) ( ZTS )
 Copyright (c) 1997-2016 The PHP Group
 Zend Engine v3.0.0, Copyright (c) 1998-2016 Zend Technologies
 
 $ php 5.6.27 -v
-glady/AlternatePhp v1.0.0
+glady/AlternatePHP v1.0.0
 PHP 5.6.27 (cli) (built: Oct 14 2016 10:23:05)
 Copyright (c) 1997-2016 The PHP Group
 Zend Engine v2.6.0, Copyright (c) 1998-2016 Zend Technologies
 
 $ php 7.0.12 -v
-glady/AlternatePhp v1.0.0
+glady/AlternatePHP v1.0.0
 PHP 7.0.12 (cli) (built: Oct 13 2016 10:47:49) ( ZTS )
 Copyright (c) 1997-2016 The PHP Group
 Zend Engine v3.0.0, Copyright (c) 1998-2016 Zend Technologies
@@ -117,14 +117,14 @@ When php_xdebug.dll (named like this) is available within `ext` folder of curren
  by `php xdebug script.php` for loading xdebug within that process.
 ```
 $ php xdebug -v
-glady/AlternatePhp v1.0.0
+glady/AlternatePHP v1.0.0
 PHP 7.0.12 (cli) (built: Oct 13 2016 10:47:49) ( ZTS )
 Copyright (c) 1997-2016 The PHP Group
 Zend Engine v3.0.0, Copyright (c) 1998-2016 Zend Technologies
     with Xdebug v2.4.1, Copyright (c) 2002-2016, by Derick Rethans
 
 $ php 7.0.12 xdebug -v
-glady/AlternatePhp v1.0.0
+glady/AlternatePHP v1.0.0
 PHP 7.0.12 (cli) (built: Oct 13 2016 10:47:49) ( ZTS )
 Copyright (c) 1997-2016 The PHP Group
 Zend Engine v3.0.0, Copyright (c) 1998-2016 Zend Technologies
