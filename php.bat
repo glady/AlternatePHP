@@ -155,15 +155,23 @@ GOTO shutdown
 
 
 :downloadRelease
-!basepath!php\downloadPhp.bat releases/php-!installVersion!-Win32-!vc!-!architecture!.zip !versionsPath!\!installVersion!.zip
+CALL :downloadPhp releases/php-!installVersion!-Win32-!vc!-!architecture!.zip !versionsPath!\!installVersion!.zip
 EXIT /B %ERRORLEVEL%
 
 :downloadArchive
-!basepath!php\downloadPhp.bat releases/archives/php-!installVersion!-Win32-!vc!-!architecture!.zip !versionsPath!\!installVersion!.zip
+CALL :downloadPhp releases/archives/php-!installVersion!-Win32-!vc!-!architecture!.zip !versionsPath!\!installVersion!.zip
 EXIT /B %ERRORLEVEL%
 
 :downloadCandidate
-!basepath!php\downloadPhp.bat qa/php-!installVersion!-Win32-!vc!-!architecture!.zip !versionsPath!\!installVersion!.zip
+CALL :downloadPhp qa/php-!installVersion!-Win32-!vc!-!architecture!.zip !versionsPath!\!installVersion!.zip
+EXIT /B %ERRORLEVEL%
+
+:downloadPhp
+SET url=http://windows.php.net/downloads/%1
+ECHO    Download: !url!
+bitsadmin /rawreturn /transfer "PHP-Download" !url! %2  > nul  2>&1
+IF exist %2      ECHO       Successful!
+IF not exist %2  ECHO       Not successful!
 EXIT /B %ERRORLEVEL%
 
 
