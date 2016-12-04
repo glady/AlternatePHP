@@ -29,6 +29,7 @@ IF "%1" == "license"   GOTO license
 IF "%1" == "versions"  GOTO versions
 IF "%1" == "install"   GOTO install
 IF "%1" == "global"    GOTO global
+IF "%1" == "rename"    GOTO rename
 GOTO php
 
 :outputVersionInformation
@@ -68,6 +69,7 @@ ECHO       php help [php /?]               = This help output
 ECHO       php license                     = Show content of license file
 ECHO       php versions                    = List all installed php versions
 ECHO       php install x.y.z               = Download and unzip php version x.y.z
+ECHO       php rename x.y.z alias          = Rename php version x.y.z to alias (x.y.z can be alias itself)
 ECHO       php global x.y.z                = Change global php version
 GOTO shutdown
 
@@ -226,6 +228,28 @@ IF not exist "!versionsPath!\%2\php.exe"     ECHO    PHP %2 is currently not ins
 IF exist "!versionsPath!\%2\php.exe"         ECHO %2>!globalVersionFile!
 GOTO shutdown
 
+rem /**
+rem  * rename a php version
+rem  */
+:rename
+IF not exist "!versionsPath!\%2\php.exe" (
+    ECHO    PHP %2 is currently not installed
+    GOTO shutdown
+)
+IF exist "!versionsPath!\%3\php.exe" (
+    ECHO    PHP %3 is already installed
+    GOTO shutdown
+)
+RENAME "!versionsPath!\%2" "%3"
+IF exist "!versionsPath!\%3\php.exe" (
+    ECHO    PHP %2 is renamed to %3
+)
+IF not exist "!versionsPath!\%3\php.exe" (
+    ECHO    Error while renaming %2 to %3
+)
+GOTO shutdown
+
+rem checking if unzip is available
 :checkUnzip
 where unzip  > nul  2>&1
 EXIT /B %ERRORLEVEL%
