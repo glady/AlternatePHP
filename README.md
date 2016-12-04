@@ -6,6 +6,8 @@ Goals:
 - Simply execute your script with another version of php
 - Quick "install" of a new version
 
+Current default PHP version: 7.0.13
+
 ## Basic usage
 
 - `php -v` or `php <script.php> <arguments>` calls current default php version
@@ -13,20 +15,20 @@ Goals:
 - `php xdebug -v` or `php xdebug <script.php> <arguments>` calls current default php version with xdebug
 - `php <version> xdebug -v` or `php <version> xdebug <script.php> <arguments>` calls the same on given php version with xdebug
 
-## Added commands
+## Added/modified commands
 
+- `php --version` and `php -v` outputs version AlternatePHP before original output
 - `php help` and `php /?` outputs help information for AlternatePHP
 - `php install` installs current default php version
 - `php install <version>` installs given php version (format: e.g. `5.6.27`)
 - `php versions` lists all currently installed versions
 - `php global <version>` configure default version (like phpenv)
+- `php rename <version> <version>` for support custom version alias
+- `php license` for output of LICENSE
 
 ## Planned 
 
-- [v1.1] #3 - prepend AlternatePhp version-information to `php -v` call
-- [v1.1] #4 - exclude default `php/php.version` file and set default within `php.bat` (it would be overwritten on self-update)
 - [v1.1] #5 - `php self-update` download latest release of AlternatePhp from GitHub
-- [v1.1] #6 - `php rename <version> <version>` for support custom version alias
 - `php local <version>` configure version for current folder (like phpenv)
 - `php configure <version> ...` is planned for some php.ini modifications (interface/arguments not planned yet)
 - `php enable-xdebug <version>` directly add correct php_xdebug.dll to given version and add extension to php.ini 
@@ -42,6 +44,22 @@ There should be no global installed PHP-Environment-Variables (like PHPRC) or ot
 ## Optional system configurations
 
 It is recommended to add AlternatePHP (directory where php.bat is located) to your PATH
+
+## Installation
+
+1. Download zip (latest release or from current master)
+2. unzip to a folder
+3. optional: put unzip.exe to the same folder, if not available on the system
+4. add that folder to path
+5. optional: use `php global <version>` to specify your version (if not set, the default is used)
+6. call `php install` to download and unzip that php version
+
+It is recommended to set a global version, because after next update another php version can be set as default.
+
+## Update
+
+You should use `php self-update` (available with v1.1) to update your installation. 
+Without self-update: download zip and unzip over existing installation.
 
 ## Example
 
