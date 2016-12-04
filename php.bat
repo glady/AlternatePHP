@@ -25,6 +25,7 @@ SET /P phpversion=<!loadedGlobalVersionFile!
 
 IF "%1" == "help"      GOTO help
 IF "%1" == "/?"        GOTO help
+IF "%1" == "license"   GOTO license
 IF "%1" == "versions"  GOTO versions
 IF "%1" == "install"   GOTO install
 IF "%1" == "global"    GOTO global
@@ -63,9 +64,25 @@ ECHO         version = optional, default version is used, when not given
 ECHO         xdebug  = enables xdebug, if php_xdebug.dll is available within ext-folder of version, default disabled
 ECHO.
 ECHO    supported wrapper actions:
+ECHO       php help [php /?]               = This help output
+ECHO       php license                     = Show content of license file
 ECHO       php versions                    = List all installed php versions
 ECHO       php install x.y.z               = Download and unzip php version x.y.z
 ECHO       php global x.y.z                = Change global php version
+GOTO shutdown
+
+rem /**
+rem  * Output of license information about this file
+rem  */
+:license
+
+CALL :header
+IF exist "!basepath!LICENSE" (
+    for /f "usebackq delims=" %%i in (!basepath!LICENSE) do ECHO %%i
+)
+IF not exist "!basepath!LICENSE" (
+    ECHO No LICENSE file found. @see https://github.com/glady/AlternatePHP/blob/master/LICENSE
+)
 GOTO shutdown
 
 
