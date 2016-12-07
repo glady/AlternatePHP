@@ -243,9 +243,6 @@ IF !currentVersion! == !latestVersion! (
     ECHO     You have already the latest version installed: !latestVersion!
     GOTO shutdown
 )
-rem TODO: not fully supported
-ECHO     ... feature in work, but not ready yet.
-GOTO shutdown
 
 CALL :downloadLatestRelease
 CALL :checkUnzip
@@ -257,8 +254,9 @@ IF "%ERRORLEVEL%" NEQ "0" (
 ECHO   Unzip new AlternatePHP over old one
 SET subFolder=AlternatePHP-!latestVersion:~1!
 unzip -qq -o !basePath!AlternatePHP\latestAlternatePhp.zip -d !basePath!update
-"!basePath!update\!subFolder!\AlternatePHP\applyUpdate.bat" "!basePath!"
+"!basePath!update\!subFolder!\AlternatePHP\applyUpdate.bat" "!basePath!update\!subFolder!\" "!basePath!"  > nul  2>&1
 rd /s /q "!basePath!update"
+ECHO Update applied!
 GOTO shutdown
 
 rem /**
