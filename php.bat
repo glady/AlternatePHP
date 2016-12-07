@@ -22,7 +22,7 @@ if not exist "!globalVersionFile!" (
     SET loadedGlobalVersionFile=!basepath!php\default.php.version
 )
 SET /P phpversion=<!loadedGlobalVersionFile!
-SET /P currentVersion=<!basePath!VERSION
+SET /P currentVersion=<!basePath!AlternatePHP\VERSION
 
 IF "%1" == "help"        GOTO help
 IF "%1" == "/?"          GOTO help
@@ -35,7 +35,7 @@ IF "%1" == "self-update" GOTO selfUpdate
 GOTO php
 
 :outputVersionInformation
-ECHO glady/AlternatePHP !currentVersion!
+ECHO glady/AlternatePHP !currentVersion! (!basepath!)
 EXIT /B 0
 
 :header
@@ -219,11 +219,11 @@ copy  !versionsPath!\!installVersion!\php.ini-production !versionsPath!\!install
 EXIT /B 0
 
 :downloadLatestVersionFile
-CALL :download https://raw.githubusercontent.com/glady/AlternatePHP/master/VERSION !versionsPath!\latestVERSION
+CALL :download https://raw.githubusercontent.com/glady/AlternatePHP/master/VERSION !basePath!AlternatePHP\latestVERSION
 EXIT /B %ERRORLEVEL%
 
 :downloadLatestRelease
-CALL :download https://github.com/glady/AlternatePHP/archive/!latestVersion!.zip !versionsPath!\latestAlternatePhp.zip
+CALL :download https://github.com/glady/AlternatePHP/archive/!latestVersion!.zip !basePath!AlternatePHP\latestAlternatePhp.zip
 EXIT /B %ERRORLEVEL%
 
 :selfUpdate
@@ -231,11 +231,11 @@ SET /P currentVersion=<!basePath!VERSION
 
 rem DEL !versionsPath!\latestVERSION
 CALL :downloadLatestVersionFile
-IF not exist !versionsPath!\latestVERSION (
+IF not exist !basePath!AlternatePHP\latestVERSION (
     ECHO     failed to retrieve latest version file
     GOTO shutdown
 )
-SET /P latestVersion=<!versionsPath!\latestVERSION
+SET /P latestVersion=<!basePath!AlternatePHP\latestVERSION
 
 IF !currentVersion! == !latestVersion! (
     ECHO     You have already the latest version installed: !latestVersion!
