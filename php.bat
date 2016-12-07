@@ -219,15 +219,17 @@ copy  !versionsPath!\!installVersion!\php.ini-production !versionsPath!\!install
 EXIT /B 0
 
 :downloadLatestVersionFile
-CALL :download https://raw.githubusercontent.com/glady/AlternatePHP/master/VERSION !basePath!AlternatePHP\latestVERSION
+CALL :download https://raw.githubusercontent.com/glady/AlternatePHP/master/AlternatePHP/VERSION !basePath!AlternatePHP\latestVERSION
 EXIT /B %ERRORLEVEL%
 
 :downloadLatestRelease
-CALL :download https://github.com/glady/AlternatePHP/archive/!latestVersion!.zip !basePath!AlternatePHP\latestAlternatePhp.zip
+IF not exist "!basePath!AlternatePHP\!latestVersion!.zip" (
+    CALL :download https://github.com/glady/AlternatePHP/archive/!latestVersion!.zip !basePath!AlternatePHP\!latestVersion!.zip
+)
 EXIT /B %ERRORLEVEL%
 
 :selfUpdate
-SET /P currentVersion=<!basePath!VERSION
+SET /P currentVersion=<!basePath!AlternatePHP\VERSION
 
 rem DEL !versionsPath!\latestVERSION
 CALL :downloadLatestVersionFile
@@ -254,8 +256,8 @@ IF "%ERRORLEVEL%" NEQ "0" (
 
 ECHO   Unzip new AlternatePHP over old one
 SET subFolder=AlternatePHP-!latestVersion:~1!
-unzip -qq -o !versionsPath!\latestAlternatePhp.zip -d !basePath!update
-xcopy /S /E "!basePath!update/!subFolder!/*" "!basePath!"
+unzip -qq -o !basePath!AlternatePHP\latestAlternatePhp.zip -d !basePath!update
+"!basePath!update\!subFolder!\AlternatePHP\applyUpdate.bat" "!basePath!"
 rd /s /q "!basePath!update"
 GOTO shutdown
 
