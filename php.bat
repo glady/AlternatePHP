@@ -232,7 +232,9 @@ EXIT /B %ERRORLEVEL%
 :selfUpdate
 SET /P currentVersion=<!basePath!AlternatePHP\VERSION
 
-DEL !versionsPath!\latestVERSION
+IF exist !versionsPath!\latestVERSION (
+    DEL !versionsPath!\latestVERSION
+)
 CALL :downloadLatestVersionFile
 IF not exist !basePath!AlternatePHP\latestVERSION (
     ECHO     failed to retrieve latest version file
