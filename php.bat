@@ -256,7 +256,7 @@ IF "%ERRORLEVEL%" NEQ "0" (
 
 ECHO   Unzip new AlternatePHP over old one
 SET subFolder=AlternatePHP-!latestVersion:~1!
-unzip -qq -o !basePath!AlternatePHP\latestAlternatePhp.zip -d !basePath!update
+unzip -qq -o !basePath!AlternatePHP\!latestVersion!.zip -d !basePath!update
 "!basePath!update\!subFolder!\AlternatePHP\applyUpdate.bat" "!basePath!update\!subFolder!\" "!basePath!"  > nul  2>&1
 rd /s /q "!basePath!update"
 ECHO Update applied!
