@@ -246,6 +246,9 @@ IF !currentVersion! == !latestVersion! (
     ECHO     You have already the latest version installed: !latestVersion!
     GOTO shutdown
 )
+rem TODO: not fully supported
+ECHO     ... feature in work, but not ready yet.
+GOTO shutdown
 
 CALL :downloadLatestRelease
 CALL :checkUnzip
