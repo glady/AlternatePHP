@@ -25,10 +25,10 @@ Current default PHP version: 7.0.13
 - `php global <version>` configure default version (like phpenv)
 - `php rename <version> <version>` for support custom version alias
 - `php license` for output of LICENSE
+- `php self-update` download latest release of AlternatePHP from GitHub
 
 ## Planned 
 
-- [v1.1] #5 - `php self-update` download latest release of AlternatePHP from GitHub
 - `php local <version>` configure version for current folder (like phpenv)
 - `php configure <version> ...` is planned for some php.ini modifications (interface/arguments not planned yet)
 - `php enable-xdebug <version>` directly add correct php_xdebug.dll to given version and add extension to php.ini 

@@ -73,6 +73,7 @@ ECHO       php versions                    = List all installed php versions
 ECHO       php install x.y.z               = Download and unzip php version x.y.z
 ECHO       php rename x.y.z alias          = Rename php version x.y.z to alias (x.y.z can be alias itself)
 ECHO       php global x.y.z                = Change global php version
+ECHO       php self-update                 = Self-Update AlternatePHP
 GOTO shutdown
 
 rem /**
@@ -231,7 +232,7 @@ EXIT /B %ERRORLEVEL%
 :selfUpdate
 SET /P currentVersion=<!basePath!AlternatePHP\VERSION
 
-rem DEL !versionsPath!\latestVERSION
+DEL !versionsPath!\latestVERSION
 CALL :downloadLatestVersionFile
 IF not exist !basePath!AlternatePHP\latestVERSION (
     ECHO     failed to retrieve latest version file
