@@ -195,8 +195,7 @@ EXIT /B %ERRORLEVEL%
 
 :download
 ECHO    Download: %1
-bitsadmin /rawreturn /transfer "Download" %1 %2  > nul  2>&1
-bitsadmin /SetSecurityFlags "Download" 0x0000  > nul  2>&1
+bitsadmin /rawreturn /transfer "Download" /PRIORITY FOREGROUND %1 %2  > nul  2>&1
 IF exist %2      ECHO       Successful!
 IF not exist %2  ECHO       Not successful!
 EXIT /B %ERRORLEVEL%
