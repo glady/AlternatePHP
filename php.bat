@@ -248,6 +248,10 @@ IF !currentVersion! == !latestVersion! (
 )
 
 CALL :downloadLatestRelease
+IF not exist !basePath!AlternatePHP\!latestVersion!.zip (
+    ECHO       download failed!
+    EXIT /B %ERRORLEVEL%
+)
 CALL :checkUnzip
 IF "%ERRORLEVEL%" NEQ "0" (
     ECHO       no unzip found!
@@ -257,8 +261,9 @@ IF "%ERRORLEVEL%" NEQ "0" (
 ECHO   Unzip new AlternatePHP over old one
 SET subFolder=AlternatePHP-!latestVersion:~1!
 unzip -qq -o !basePath!AlternatePHP\!latestVersion!.zip -d !basePath!update
-"!basePath!update\!subFolder!\AlternatePHP\applyUpdate.bat" "!basePath!update\!subFolder!\" "!basePath!"  > nul  2>&1
+"!basePath!update\!subFolder!\AlternatePHP\applyUpdate.bat" "!basePath!update\!subFolder!\" "!basePath!"
 rd /s /q "!basePath!update"
+
 ECHO Update applied!
 GOTO shutdown
 
