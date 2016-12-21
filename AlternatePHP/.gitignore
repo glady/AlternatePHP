@@ -4,5 +4,6 @@
 !.gitignore
 !ChangeLog-v1.0.md
 !ChangeLog-v1.1.md
+!ChangeLog-v1.2.md
 !VERSION
 !applyUpdate.bat

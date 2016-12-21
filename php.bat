@@ -119,6 +119,15 @@ IF [%1] == [xdebug] (
     )
     SHIFT
 )
+IF [%1] == [composer] (
+    CALL :removeFromStringLeft params "!params!" 9
+    CALL :trimStringLeft params "!params!"
+    CALL :initializeComposer
+    IF exist "!basePath!AlternatePHP\composer.phar" (
+        SET params="!basePath!\AlternatePHP\composer.phar" !params!
+    )
+    SHIFT
+)
 
 rem call specific php
 IF not exist "!versionsPath!\!phpversion!\php.exe" (
@@ -175,6 +184,16 @@ ECHO.
 ECHO    Successfully added php version !installVersion! [thread safe, !vc!, !architecture!]
 GOTO shutdown
 
+:initializeComposer
+IF not exist "!basePath!AlternatePHP\composer.phar" (
+    CALL :download "https://getcomposer.org/composer.phar" "!basePath!AlternatePHP\composer.phar"
+)
+rem latest phar CAN be not up-to-date
+IF exist "!basePath!AlternatePHP\composer.phar" (
+    echo     Self-Update Composer:
+    "!versionsPath!\!phpversion!\php.exe" "!basePath!AlternatePHP\composer.phar" self-update
+)
+EXIT /B %ERRORLEVEL%
 
 :downloadRelease
 CALL :downloadPhp releases/php-!installVersion!-Win32-!vc!-!architecture!.zip !versionsPath!\!installVersion!.zip

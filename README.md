@@ -26,6 +26,7 @@ Current default PHP version: 7.0.13
 - `php rename <version> <version>` for support custom version alias
 - `php license` for output of LICENSE
 - `php self-update` download latest release of AlternatePHP from GitHub
+- `php [<version>] [xdebug] composer <command>` run latest composer.phar
 
 ## Planned 
 
