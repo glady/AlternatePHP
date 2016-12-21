@@ -67,13 +67,15 @@ ECHO         version = optional, default version is used, when not given
 ECHO         xdebug  = enables xdebug, if php_xdebug.dll is available within ext-folder of version, default disabled
 ECHO.
 ECHO    supported wrapper actions:
-ECHO       php help [php /?]               = This help output
-ECHO       php license                     = Show content of license file
-ECHO       php versions                    = List all installed php versions
-ECHO       php install x.y.z               = Download and unzip php version x.y.z
-ECHO       php rename x.y.z alias          = Rename php version x.y.z to alias (x.y.z can be alias itself)
-ECHO       php global x.y.z                = Change global php version
-ECHO       php self-update                 = Self-Update AlternatePHP
+ECHO       php help [php /?]                 = This help output
+ECHO       php license                       = Show content of license file
+ECHO       php versions                      = List all installed php versions
+ECHO       php install x.y.z                 = Download and unzip php version x.y.z
+ECHO       php rename x.y.z alias            = Rename php version x.y.z to alias (x.y.z can be alias itself)
+ECHO       php global x.y.z                  = Change global php version
+ECHO       php self-update                   = Self-Update AlternatePHP
+ECHO       php [x.y.z] [xdebug] composer ... = run latest composer.phar
+
 GOTO shutdown
 
 rem /**
