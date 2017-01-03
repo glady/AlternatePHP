@@ -190,10 +190,12 @@ GOTO shutdown
 IF not exist "!basePath!AlternatePHP\composer.phar" (
     CALL :download "https://getcomposer.org/composer.phar" "!basePath!AlternatePHP\composer.phar"
 )
-rem latest phar CAN be not up-to-date
+rem latest phar is snapshot
+rem  `- switch to stable-channel by self-update with --stable
+rem  `- do not parse validate and use composer.json within current working dir by disable plugins by --no-plugins
 IF exist "!basePath!AlternatePHP\composer.phar" (
-    echo     Self-Update Composer:
-    "!versionsPath!\!phpversion!\php.exe" "!basePath!AlternatePHP\composer.phar" self-update
+    echo     Self-Update Composer (--no-plugins --stable):
+    "!versionsPath!\!phpversion!\php.exe" "!basePath!AlternatePHP\composer.phar" self-update --no-plugins --stable
 )
 EXIT /B %ERRORLEVEL%
 
