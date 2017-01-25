@@ -6,7 +6,7 @@ Goals:
 - Simply execute your script with another version of php
 - Quick "install" of a new version
 
-Current default PHP version: 7.0.13
+Current default PHP version: 7.0.15
 
 ## Basic usage
 
